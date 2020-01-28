@@ -8,27 +8,31 @@ analysis for data mining purposes, beacons would greatly help Royal Caribbean
 to continue advancing the quality of their vacations to their guests.
 
 
+This project is still under development, but in its current state it simulates
+a vacationer going down a slide at CocoCay. To run it, you need a linux device
+with pybluez / bluez installed to run the "beaconMaster.py" file in the Scripts
+folder. Then, you need two iBeacons within range of the linux device. set the
+UUID to '636f3f8f-6491-4bee-95f7-d8cc64a863b5' and choose any two distinct
+values for the minor variable. The first one simulates the person starting at 
+the top of a slide, and the second one will end the timing for it.
 
-Part 1: Created Raspberry Pi Beacon
-- install Raspbian Software
-- pull this repo
-- run the 'python Beacon_Go'
+setting up iBeacon: - http://www.wadewegner.com/2014/05/create-an-ibeacon-transmitter-with-the-raspberry-pi/
+(or you can download an app and do it on your phone)
+
+Still to do:
+
+-Connect to Database and populate as necessary
+-Create RSSI data project to create an algorithm for determining position of a beacon.
+-Implement other examples of possible data captures from Royal Caribbean integrating
+beacons into their infrastructure.
 
 
-Part 2: Create Postgres DB on local machine
-- run command "python DB_Begin"
 
 
-Part 3: Connect App to Beacon
-- run command "Python Begin Beacon Search"
 
 
-Part 4: Populate Database
-- run command "Python Run DatabasePopulation"
 
 
-Part 5: Run Analysis
-- Using the populated Data, Creates Metrics
 
 
 
@@ -39,10 +43,7 @@ pip install psycopg2
 pip install configparser
 create Database, host it, connect in in database.ini file in Database folder
 
-
-
-
-Citations: 
+Citations:
 @article{mohammadi2017semi,
 author={M. Mohammadi and A. Al-Fuqaha and M. Guizani and J. S. Oh},
 journal={IEEE Internet of Things Journal},

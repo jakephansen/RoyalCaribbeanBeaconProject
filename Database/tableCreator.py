@@ -11,22 +11,17 @@ def connect():
     try:
         # read connection parameters
         params = config()
-
         # connect to the PostgreSQL server
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
-
         # create a cursor
         cur = conn.cursor()
-
    # execute a statement
         print('PostgreSQL database version:')
         cur.execute('SELECT version()')
-
         # display the PostgreSQL database server version
         db_version = cur.fetchone()
         print(db_version)
-
        # close the communication with the PostgreSQL
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
@@ -35,9 +30,6 @@ def connect():
         if conn is not None:
             conn.close()
             print('Database connection closed.')
-
-
-
 
 
 
@@ -109,10 +101,10 @@ def create_tables():
             conn.close()
 
 
-def insert_vendor(vendor_name):
-    """ insert a new vendor into the vendors table """
-    sql = """INSERT INTO vendors(vendor_name)
-             VALUES(%s) RETURNING vendor_id;"""
+def insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name):
+    """ insert a new beacon into the beacons table """
+    sql = """INSERT INTO beacon
+             VALUES(beacon_id,latitude,longitude,height,boat,island,section,number,name) ;"""
     conn = None
     vendor_id = None
     try:
@@ -123,9 +115,9 @@ def insert_vendor(vendor_name):
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(sql, (vendor_name,))
+        cur.execute(sql, (beacon_id,latitude,longitude,height,boat,island,section,number,name,))
         # get the generated id back
-        vendor_id = cur.fetchone()[0]
+
         # commit the changes to the database
         conn.commit()
         # close communication with the database
@@ -136,43 +128,20 @@ def insert_vendor(vendor_name):
         if conn is not None:
             conn.close()
 
-    return vendor_id
+    return 'Done'
 
 
 
-def insert_vendor_list(vendor_list):
-    """ insert multiple vendors into the vendors table  """
-    sql = "INSERT INTO vendors(vendor_name) VALUES(%s)"
-    conn = None
-    try:
-        # read database configuration
-        params = config()
-        # connect to the PostgreSQL database
-        conn = psycopg2.connect(**params)
-        # create a new cursor
-        cur = conn.cursor()
-        # execute the INSERT statement
-        cur.executemany(sql,vendor_list)
-        # commit the changes to the database
-        conn.commit()
-        # close communication with the database
-        cur.close()
-    except (Exception, psycopg2.DatabaseError) as error:
-        print(error)
-    finally:
-        if conn is not None:
-            conn.close()
 
-
-def get_vendors():
-    """ query data from the vendors table """
+def get_beacons():
+    """ query data from the beacons table """
     conn = None
     try:
         params = config()
         conn = psycopg2.connect(**params)
         cur = conn.cursor()
-        cur.execute("SELECT vendor_id, vendor_name FROM vendors ORDER BY vendor_name")
-        print("The number of parts: ", cur.rowcount)
+        cur.execute("SELECT beacon_id,latitude,longitude,height,boat,island,section,number,name FROM beacon ORDER BY beacon_id")
+        print("The number of beacons: ", cur.rowcount)
         row = cur.fetchone()
 
         while row is not None:
@@ -187,54 +156,26 @@ def get_vendors():
             conn.close()
 
 if __name__ == '__main__':
-    # connect()
+
     # create_tables()
-    # insert one vendor
-    # insert_vendor("3M Co.")
-    # # insert multiple vendors
-    # insert_vendor_list([
-    #     ('AKM Semiconductor Inc.',),
-    #     ('Asahi Glass Co Ltd.',),
-    #     ('Daikin Industries Ltd.',),
-    #     ('Dynacast International Inc.',),
-    #     ('Foster Electric Co. Ltd.',),
-    #     ('Murata Manufacturing Co. Ltd.',)
-    # ])
-    get_vendors()
-
-
-
-
-
-
-
-
-
-
-#
-# import psycopg2
-# from config import config
-# try:
-#     connection = psycopg2.connect(user = "postgres",
-#                                   password = "Wxhuyufs1!",
-#                                   host = "127.0.0.1",
-#                                   port = "5432",
-#                                   database = "postgres")
-#
-#     cursor = connection.cursor()
-#     # Print PostgreSQL Connection properties
-#     print ( connection.get_dsn_parameters(),"\n")
-#
-#     # Print PostgreSQL version
-#     cursor.execute("SELECT version();")
-#     record = cursor.fetchone()
-#     print("You are connected to - ", record,"\n")
-#
-# except (Exception, psycopg2.Error) as error :
-#     print ("Error while connecting to PostgreSQL", error)
-# finally:
-#     #closing database connection.
-#         if(connection):
-#             cursor.close()
-#             connection.close()
-#             print("PostgreSQL connection is closed")
+    beacon_id = 1
+    latitude = '100.0000'
+    longitude = '20.000'
+    height = '4'
+    boat = 'False'
+    island = 'True'
+    section = 'WaterPark'
+    number = '8'
+    name = 'TopSlide'
+    insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name)
+    beacon_id = 2
+    latitude = '000.0000'
+    longitude = '000.0000'
+    height = '4'
+    boat = 'False'
+    island = 'True'
+    section = 'WaterPark'
+    number = '5'
+    name = 'BottomSlide'
+    insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name)
+    get_beacons()

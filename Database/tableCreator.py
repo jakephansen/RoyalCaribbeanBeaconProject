@@ -58,7 +58,7 @@ def create_tables():
 
         """
         CREATE TABLE Beacon(
-                Beacon_id INTEGER PRIMARY KEY,
+                Beacon_id INTEGER,
                 Latitude VARCHAR(255),
                 Longitude VARCHAR(255),
                 Height VARCHAR(255),
@@ -104,7 +104,7 @@ def create_tables():
 def insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name):
     """ insert a new beacon into the beacons table """
     sql = """INSERT INTO beacon
-             VALUES(beacon_id,latitude,longitude,height,boat,island,section,number,name) ;"""
+             VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s) ;"""
     conn = None
     vendor_id = None
     try:
@@ -115,9 +115,7 @@ def insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number
         # create a new cursor
         cur = conn.cursor()
         # execute the INSERT statement
-        cur.execute(sql, (beacon_id,latitude,longitude,height,boat,island,section,number,name,))
-        # get the generated id back
-
+        cur.execute(sql, (beacon_id,latitude,longitude,height,boat,island,section,number,name))
         # commit the changes to the database
         conn.commit()
         # close communication with the database
@@ -129,8 +127,6 @@ def insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number
             conn.close()
 
     return 'Done'
-
-
 
 
 def get_beacons():
@@ -156,26 +152,32 @@ def get_beacons():
             conn.close()
 
 if __name__ == '__main__':
+# On First Run, create TAbles. Then comment this function, and uncomment lines 163-182 to populate the two beacons
+    create_tables()
 
-    # create_tables()
-    beacon_id = 1
-    latitude = '100.0000'
-    longitude = '20.000'
-    height = '4'
-    boat = 'False'
-    island = 'True'
-    section = 'WaterPark'
-    number = '8'
-    name = 'TopSlide'
-    insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name)
-    beacon_id = 2
-    latitude = '000.0000'
-    longitude = '000.0000'
-    height = '4'
-    boat = 'False'
-    island = 'True'
-    section = 'WaterPark'
-    number = '5'
-    name = 'BottomSlide'
-    insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name)
-    get_beacons()
+
+
+
+
+
+    # beacon_id = 1
+    # latitude = '100.0000'
+    # longitude = '20.000'
+    # height = '4'
+    # boat = 'False'
+    # island = 'True'
+    # section = 'WaterPark'
+    # number = '8'
+    # name = 'TopSlide'
+    # insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name)
+    # beacon_id = 2
+    # latitude = '000.0000'
+    # longitude = '000.0000'
+    # height = '4'
+    # boat = 'False'
+    # island = 'True'
+    # section = 'WaterPark'
+    # number = '5'
+    # name = 'BottomSlide'
+    # insert_beacon(beacon_id,latitude,longitude,height,boat,island,section,number,name)
+    # # get_beacons() leave this line commented, or don't, not big deal, need to get this into other script still
